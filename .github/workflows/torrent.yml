@@ -1,0 +1,24 @@
+name: Docker Torrent Download
+on :
+wersflow dispatch:
+Inputs :
+url :
+description: 'Torrent Tile file URL '
+required: true
+jobs :
+download:
+runs-on: ubuntu-Latest
+container: subeki13/Torrent-downloader:latest 
+steps:
+- name: Write .env File
+run :
+echo '${{secrets.DOTENV }}' >> .env
+
+- name: Download File
+run : node/app/download.js ${{ github.event.inputs.url }}
+
+- name: LS
+run: cd /data && ls - la
+
+-name : Upload To Drive
+run: node /app/upload.js
